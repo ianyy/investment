@@ -22,7 +22,7 @@ start_date = '2015-01-01'
 end_date = '2019-12-31'
 frequency = 'daily'
 weight_US = 0.8
-weight_HK = 0.2
+weight_HK = 1-weight_US
 
 # %%
 df_US = get_price_table(ticker_US, start_date, end_date, frequency)
@@ -44,3 +44,14 @@ df[['log_price_US', 'log_price_HK', 'log_price_weighted']] = df[[
 # %%
 df[['log_return_US', 'log_return_HK', 'log_return_weighted']] = df[[
     'log_price_US', 'log_price_HK', 'log_price_weighted']].diff()
+
+# %%
+mean_return = df[['log_return_US',
+                  'log_return_HK', 'log_return_weighted']].mean()
+volatility_return = df[['log_return_US',
+                        'log_return_HK', 'log_return_weighted']].std()
+
+# %%
+sharpe_ratio = mean_return/volatility_return
+
+# %%
