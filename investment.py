@@ -1,5 +1,6 @@
 # %%
 import pandas as pd
+import numpy as np
 from yahoofinancials import YahooFinancials
 
 
@@ -28,13 +29,14 @@ df_US = get_price_table(ticker_US, start_date, end_date, frequency)
 df_HK = get_price_table(ticker_HK, start_date, end_date, frequency)
 
 # %%
-df_portfolio = (pd.merge(df_US, df_HK, how='outer', left_index=True,
-                         right_index=True, suffixes=('_US', '_HK'))
-                [['adjclose_US', 'adjclose_HK']].fillna(method='ffill'))
+df = (pd.merge(df_US, df_HK, how='outer', left_index=True,
+               right_index=True, suffixes=('_US', '_HK'))
+      [['adjclose_US', 'adjclose_HK']].fillna(method='ffill'))
 
 # %%
-df_portfolio[['US_return', 'HK_return']] = df_portfolio.pct_change()
+df['price_weighted'] = weight_US * \
+    df['adjclose_US']+weight_HK*df['adjclose_HK']
 
 # %%
-df_portfolio['total_return'] = weight_US * \
-    df_portfolio['US_return']+weight_HK*df_portfolio['HK_return']
+df[['log_price_US', 'log_price_HK', 'log_price_weighted']] = df[[
+    'adjclose_US', 'adjclose_HK', 'price_weighted']].applymap(np.log)
