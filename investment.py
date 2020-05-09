@@ -40,3 +40,7 @@ df['price_weighted'] = weight_US * \
 # %%
 df[['log_price_US', 'log_price_HK', 'log_price_weighted']] = df[[
     'adjclose_US', 'adjclose_HK', 'price_weighted']].applymap(np.log)
+
+# %%
+df[['log_return_US', 'log_return_HK', 'log_return_weighted']] = df[[
+    'log_price_US', 'log_price_HK', 'log_price_weighted']].diff()
