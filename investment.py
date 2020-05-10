@@ -48,10 +48,17 @@ df[['log_return_US', 'log_return_HK', 'log_return_weighted']] = df[[
 # %%
 mean_return = df[['log_return_US',
                   'log_return_HK', 'log_return_weighted']].mean()
-volatility_return = df[['log_return_US',
-                        'log_return_HK', 'log_return_weighted']].std()
+vol_return = df[['log_return_US',
+                 'log_return_HK', 'log_return_weighted']].std()
 
 # %%
-sharpe_ratio = mean_return/volatility_return
+sharpe_ratio = mean_return/vol_return
+
+# %%
+corr = df['log_return_US'].corr(df['log_return_HK'])
+
+# %%
+stats_sharpe = pd.DataFrame({'return_mean': mean_return,
+                             'return_volatility': vol_return, 'sharpe_ratio': sharpe_ratio})
 
 # %%
